@@ -10,12 +10,18 @@ LABEL description="Mean Reversion Trading Bot for Binance Futures"
 ENV PYTHONDONTWRITEBYTECODE=1
 # Prevents Python from buffering stdout and stderr (for real-time logging)
 ENV PYTHONUNBUFFERED=1
+# Set timezone to Bangkok (UTC+7)
+ENV TZ=Asia/Bangkok
 
 # Install system dependencies
 # These are required for some Python packages (numpy, pandas, etc.)
+# tzdata is required for timezone support
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
+    tzdata \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
