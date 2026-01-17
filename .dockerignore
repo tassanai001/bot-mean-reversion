@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Logs (we'll mount this as volume)
+# Uncomment if you don't want to copy logs into image
+# logs/
+
+# Documentation
+README.md
+*.md
+
+# Archives and backups
+archive/
+*.zip
+*.tar.gz
+
+# Environment (will be passed via docker-compose)
+# Keep .env.example for reference
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Scripts (not needed in container)
+start.sh
+log-list.sh
+start-prd.sh

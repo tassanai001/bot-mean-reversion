@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Trading bot service
+  trading-bot:
+    # Service name that will be used in Docker
+    container_name: mean-reversion-bot
+
+    # Build configuration
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Image name (useful for versioning)
+    image: trading-bot:latest
+
+    # Restart policy - container will restart unless manually stopped
+    # Options: no, always, on-failure, unless-stopped
+    restart: unless-stopped
+
+    # Environment variables from .env file
+    # This file contains API keys and configuration
+    env_file:
+      - .env
+
+    # Volume mappings for data persistence
+    volumes:
+      # Mount local logs directory to container logs directory
+      # Format: <host_path>:<container_path>:<options>
+      # This ensures logs persist even if container is removed
+      - ./logs:/app/logs:rw
+
+      # Optional: Mount .env file explicitly (already handled by env_file)
+      # Uncomment if you want to update .env without rebuilding
+      # - ./.env:/app/.env:ro
+
+    # Network mode (optional)
+    # Use bridge for isolated network, or host for direct host network access
+    network_mode: bridge
+
+    # Resource limits (optional but recommended for production)
+    # Uncomment and adjust based on your server capacity
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '1.0'
+    #       memory: 1G
+    #     reservations:
+    #       cpus: '0.5'
+    #       memory: 512M
+
+    # Logging configuration (optional)
+    # This controls Docker's own logging, separate from app logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
