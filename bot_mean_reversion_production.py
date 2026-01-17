@@ -62,6 +62,40 @@ def setup_logging():
 logger = setup_logging()
 
 # ---------------------------------------------------------
+# 2. CONFIGURATION (Load from .env file FIRST!)
+# ---------------------------------------------------------
+load_dotenv()
+
+# API Credentials
+API_KEY = os.getenv('API_KEY', 'YOUR_BINANCE_API_KEY')
+API_SECRET = os.getenv('API_SECRET', 'YOUR_BINANCE_SECRET_KEY')
+
+# Trading Configuration
+SYMBOL = os.getenv('SYMBOL', 'BNB/USDT')
+TIMEFRAME = os.getenv('TIMEFRAME', '15m')
+LIMIT = int(os.getenv('LIMIT', '100'))
+
+# Strategy Parameters
+Z_SCORE_WINDOW = int(os.getenv('Z_SCORE_WINDOW', '20'))
+ENTRY_THRESHOLD = float(os.getenv('ENTRY_THRESHOLD', '2.0'))
+EXIT_THRESHOLD = float(os.getenv('EXIT_THRESHOLD', '0.5'))
+
+# Risk Management
+RISK_PER_TRADE = float(os.getenv('RISK_PER_TRADE', '0.01'))
+STOP_LOSS_PCT = float(os.getenv('STOP_LOSS_PCT', '0.02'))
+MAX_LEVERAGE = int(os.getenv('MAX_LEVERAGE', '10'))
+
+# Retry Configuration
+MAX_RETRIES = int(os.getenv('MAX_RETRIES', '3'))
+RETRY_DELAY = int(os.getenv('RETRY_DELAY', '2'))  # seconds
+
+# LINE Messaging API Configuration
+LINE_CHANNEL_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', '')
+LINE_CHANNEL_SECRET = os.getenv('LINE_CHANNEL_SECRET', '')
+LINE_USER_ID = os.getenv('LINE_USER_ID', '')
+LINE_ENABLED = bool(LINE_CHANNEL_ACCESS_TOKEN and LINE_USER_ID)  # Auto-disable if credentials missing
+
+# ---------------------------------------------------------
 # LINE NOTIFICATION CLASS
 # ---------------------------------------------------------
 class LineNotifier:
@@ -238,46 +272,12 @@ class LineNotifier:
 
         return self.send_message(message)
 
-# Initialize LINE Notifier
+# Initialize LINE Notifier (after config is loaded)
 line_notifier = LineNotifier(
     access_token=LINE_CHANNEL_ACCESS_TOKEN,
     user_id=LINE_USER_ID,
     enabled=LINE_ENABLED
 )
-
-# ---------------------------------------------------------
-# 2. CONFIGURATION (Load from .env file)
-# ---------------------------------------------------------
-load_dotenv()
-
-# API Credentials
-API_KEY = os.getenv('API_KEY', 'YOUR_BINANCE_API_KEY')
-API_SECRET = os.getenv('API_SECRET', 'YOUR_BINANCE_SECRET_KEY')
-
-# Trading Configuration
-SYMBOL = os.getenv('SYMBOL', 'BNB/USDT')
-TIMEFRAME = os.getenv('TIMEFRAME', '15m')
-LIMIT = int(os.getenv('LIMIT', '100'))
-
-# Strategy Parameters
-Z_SCORE_WINDOW = int(os.getenv('Z_SCORE_WINDOW', '20'))
-ENTRY_THRESHOLD = float(os.getenv('ENTRY_THRESHOLD', '2.0'))
-EXIT_THRESHOLD = float(os.getenv('EXIT_THRESHOLD', '0.5'))
-
-# Risk Management
-RISK_PER_TRADE = float(os.getenv('RISK_PER_TRADE', '0.01'))
-STOP_LOSS_PCT = float(os.getenv('STOP_LOSS_PCT', '0.02'))
-MAX_LEVERAGE = int(os.getenv('MAX_LEVERAGE', '10'))
-
-# Retry Configuration
-MAX_RETRIES = int(os.getenv('MAX_RETRIES', '3'))
-RETRY_DELAY = int(os.getenv('RETRY_DELAY', '2'))  # seconds
-
-# LINE Messaging API Configuration
-LINE_CHANNEL_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', '')
-LINE_CHANNEL_SECRET = os.getenv('LINE_CHANNEL_SECRET', '')
-LINE_USER_ID = os.getenv('LINE_USER_ID', '')
-LINE_ENABLED = bool(LINE_CHANNEL_ACCESS_TOKEN and LINE_USER_ID)  # Auto-disable if credentials missing
 
 # ---------------------------------------------------------
 # 3. EXCHANGE INITIALIZATION WITH PRODUCTION SETTINGS
